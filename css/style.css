@@ -1,0 +1,7 @@
+/* //css/style.css */
+@import url("./base.css");
+@import url("./layout.css");
+@import url("./screens.css");
+@import url("./components.css");
+@import url("./minigame.css");
+@import url("./responsive.css");

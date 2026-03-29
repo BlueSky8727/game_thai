@@ -1,0 +1,136 @@
+/* //css/minigame.css */
+.mini-game-area {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  height: 440px;
+  margin: 22px auto 0;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 2px solid #dfeef9;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.35), transparent 20%),
+    linear-gradient(180deg, #d8f8c9 0%, #95de79 45%, #58a943 100%);
+}
+
+.mini-game-area.theme-field {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.35), transparent 20%),
+    linear-gradient(180deg, #d8f8c9 0%, #95de79 45%, #58a943 100%);
+}
+
+.mini-game-area.theme-barn {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2), transparent 20%),
+    linear-gradient(180deg, #ffe1b9 0%, #f2b36d 45%, #b86e2e 100%);
+}
+
+.mini-game-area.theme-water {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.28), transparent 20%),
+    linear-gradient(180deg, #d7f6ff 0%, #7fd9ff 50%, #1aa2df 100%);
+}
+
+.mini-game-area.theme-river {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2), transparent 20%),
+    linear-gradient(180deg, #d8f1ff 0%, #9fd7ff 35%, #3ca2ff 70%, #1f6fd8 100%);
+}
+
+.mini-game-area.theme-mortar {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18), transparent 20%),
+    linear-gradient(180deg, #fff1d6 0%, #ffd39a 45%, #ff9e57 100%);
+}
+
+.mini-game-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(8, 31, 15, 0.28);
+}
+
+.mini-game-overlay.active {
+  display: flex;
+}
+
+.mini-overlay-card {
+  max-width: 460px;
+  padding: 28px 24px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+}
+
+.mini-overlay-card h3 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  color: #103f5f;
+}
+
+.mini-overlay-card p {
+  margin: 0 0 18px;
+  line-height: 1.6;
+  color: #4f6b7b;
+}
+
+.mini-result-text {
+  min-height: 40px;
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #103f5f;
+}
+
+.player {
+  position: absolute;
+  left: 40px;
+  top: 40px;
+  z-index: 3;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  user-select: none;
+}
+
+.enemy {
+  position: absolute;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+  user-select: none;
+}
+
+.enemy.enemy-big {
+  width: 52px;
+  height: 52px;
+  font-size: 28px;
+}
+
+.enemy.enemy-small {
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+}
+
+.enemy.enemy-fast {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}

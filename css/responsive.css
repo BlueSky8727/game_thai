@@ -1,0 +1,77 @@
+/* //css/responsive.css */
+@media (max-width: 768px) {
+  .game-card {
+    padding: 18px;
+    min-height: auto;
+  }
+
+  .welcome-screen,
+  .result-screen,
+  .mini-game-screen {
+    min-height: 560px;
+  }
+
+  .welcome-title,
+  .result-title {
+    font-size: 30px;
+  }
+
+  .welcome-subtitle,
+  .result-score,
+  .result-level,
+  .mini-game-desc,
+  .mini-guide {
+    font-size: 16px;
+  }
+
+  .top-bar h1 {
+    font-size: 24px;
+  }
+
+  .status-box {
+    font-size: 14px;
+  }
+
+  .choice-btn {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .start-btn {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .score-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .mini-game-area {
+    height: 360px;
+  }
+
+  .player {
+    width: 48px;
+    height: 48px;
+    font-size: 26px;
+  }
+
+  .enemy {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+
+  .enemy.enemy-big {
+    width: 46px;
+    height: 46px;
+    font-size: 24px;
+  }
+
+  .enemy.enemy-small {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,187 @@
+<!-- //index.html -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เกมทายคำสุภาษิตไทย</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <div class="game-card">
+
+      <section id="welcome-screen" class="screen active welcome-screen">
+        <div class="welcome-content">
+          <div class="welcome-badge">Thai Proverb Quiz</div>
+          <h1 class="welcome-title">ยินดีต้อนรับสู่เกมทายคำสุภาษิตไทย</h1>
+          <p class="welcome-subtitle">
+            ดูรูปภาพแล้วเลือกคำสุภาษิตไทยที่ตรงกับภาพให้ถูกต้อง
+            หลังตอบแต่ละข้อจะมี mini game ประจำข้อเพื่อเก็บคะแนนโบนัส
+          </p>
+
+          <div class="welcome-decor">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <button id="start-btn" class="start-btn">เริ่มเล่น</button>
+        </div>
+      </section>
+
+      <section id="game-screen" class="screen game-screen">
+        <div class="top-bar">
+          <h1>เกมทายคำสุภาษิตไทย</h1>
+
+          <div class="status-group">
+            <div class="status-box">คะแนนหลัก: <span id="score">0</span></div>
+            <div class="status-box bonus-box">โบนัส: <span id="bonus-score">0</span></div>
+            <div class="status-box timer-box">เวลา: <span id="timer">10</span> วิ</div>
+          </div>
+        </div>
+
+        <div class="question-box">
+          <div class="question-count">
+            ข้อ <span id="current-question">1</span> / <span id="total-question">0</span>
+          </div>
+
+          <div class="image-box">
+            <img id="question-image" src="" alt="รูปคำถาม" />
+          </div>
+
+          <div id="choices" class="choices"></div>
+
+          <div id="message" class="message"></div>
+
+          <div class="bottom-actions">
+            <button id="next-btn" class="next-btn" style="display: none;">ข้อต่อไป</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="mini-game-screen" class="screen mini-game-screen">
+        <div class="mini-game-content">
+          <div class="result-badge">Mini Game</div>
+          <h2 id="mini-game-title" class="result-title">มินิเกม</h2>
+          <p id="mini-game-desc" class="mini-game-desc"></p>
+
+          <div class="mini-stats">
+            <div class="status-box timer-box">
+              เวลาเหลือ: <span id="mini-time">10</span> วิ
+            </div>
+            <div class="status-box bonus-box">
+              โบนัสที่ได้: <span id="mini-score">0</span>
+            </div>
+          </div>
+
+          <div id="mini-game-area" class="mini-game-area">
+            <div id="player" class="player" style="display: none;">🧍</div>
+
+            <div id="mini-game-overlay" class="mini-game-overlay active">
+              <div class="mini-overlay-card">
+                <h3 id="mini-overlay-title">มินิเกม</h3>
+                <p id="mini-overlay-desc">
+                  ใช้ปุ่ม W A S D หรือปุ่มลูกศรในการควบคุม
+                </p>
+                <button id="mini-start-btn" class="start-btn" type="button">เริ่มมินิเกม</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-guide">
+            ปุ่มควบคุม: W A S D / ↑ ↓ ← →
+          </div>
+
+          <div id="mini-result-text" class="mini-result-text"></div>
+
+          <div class="bottom-actions">
+            <button id="mini-continue-btn" class="next-btn" style="display: none;">ไปข้อถัดไป</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="result-screen" class="screen result-screen">
+        <div class="result-content">
+          <div class="result-badge">สรุปผลคะแนน</div>
+          <h2 class="result-title">จบเกมแล้ว</h2>
+
+          <p class="result-score" id="final-main-score-text">คะแนนหลัก: 0 / 5</p>
+          <p class="result-score bonus-result" id="final-bonus-score-text">คะแนนโบนัส: 0</p>
+          <p class="result-score total-result" id="final-total-score-text">คะแนนรวม: 0</p>
+          <p class="result-level" id="final-level-text">ระดับ: -</p>
+
+          <div class="save-score-box">
+            <label for="player-name" class="input-label">ใส่ชื่อเพื่อบันทึกคะแนน</label>
+            <input
+              id="player-name"
+              class="player-input"
+              type="text"
+              maxlength="30"
+              placeholder="เช่น Sky"
+            />
+            <div class="result-actions">
+              <button id="save-score-btn" class="save-btn" type="button">บันทึกคะแนน</button>
+              <button id="play-again-btn" class="restart-btn" type="button">เล่นใหม่</button>
+            </div>
+          </div>
+
+          <div class="scoreboard-box">
+            <div class="scoreboard-header">
+              <h3>Score Board</h3>
+              <button id="clear-scoreboard-btn" class="clear-btn" type="button">ล้างคะแนน</button>
+            </div>
+            <div id="scoreboard-list" class="scoreboard-list"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div id="answer-popup" class="answer-popup hidden" aria-hidden="true">
+    <div class="answer-popup-backdrop"></div>
+
+    <div class="answer-popup-card" role="dialog" aria-modal="true" aria-labelledby="answer-popup-title">
+      <div id="answer-popup-badge" class="answer-popup-badge">ผลลัพธ์</div>
+      <h2 id="answer-popup-title" class="answer-popup-title">เฉลย</h2>
+
+      <div class="answer-popup-body">
+        <div class="answer-popup-row">
+          <span class="answer-popup-label">คำตอบที่ถูก:</span>
+          <span id="answer-popup-correct" class="answer-popup-value"></span>
+        </div>
+
+        <div class="answer-popup-section">
+          <div class="answer-popup-section-title">ความหมาย</div>
+          <div id="answer-popup-meaning" class="answer-popup-text"></div>
+        </div>
+
+        <div class="answer-popup-section">
+          <div class="answer-popup-section-title">คำอธิบายเพิ่มเติม</div>
+          <div id="answer-popup-explanation" class="answer-popup-text"></div>
+        </div>
+      </div>
+
+      <div class="answer-popup-actions">
+        <button id="answer-popup-next-btn" class="next-btn" type="button">ไปต่อ</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/mini-games/shared.js"></script>
+  <script src="js/mini-games/game1.js"></script>
+  <script src="js/mini-games/game2.js"></script>
+  <script src="js/mini-games/game3.js"></script>
+  <script src="js/mini-games/game4.js"></script>
+  <script src="js/mini-games/game5.js"></script>
+  <script src="js/mini-games/game6.js"></script>
+  <script src="js/mini-games/game7.js"></script>
+  <script src="js/mini-games/game8.js"></script>
+  <script src="js/mini-games/game9.js"></script>
+  <script src="js/mini-games/game10.js"></script>
+  <script src="js/miniGames.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
