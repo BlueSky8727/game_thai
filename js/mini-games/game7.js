@@ -34,6 +34,7 @@ window.MiniGameShared.register("game7", (config = {}) => {
       let animationId = null;
       let finished = false;
       let score = 0;
+      let input = null;
 
       const state = {
         width: 0,
@@ -125,11 +126,22 @@ window.MiniGameShared.register("game7", (config = {}) => {
         setResultText("โดนเสือจับได้ ไม่ได้คะแนนโบนัส");
       }
 
+      function getMoveState() {
+        return {
+          up: keys.up || (input && input.state.up),
+          down: keys.down || (input && input.state.down),
+          left: keys.left || (input && input.state.left),
+          right: keys.right || (input && input.state.right)
+        };
+      }
+
       function updatePlayer() {
-        if (keys.up) state.player.y -= state.player.speed;
-        if (keys.down) state.player.y += state.player.speed;
-        if (keys.left) state.player.x -= state.player.speed;
-        if (keys.right) state.player.x += state.player.speed;
+        const move = getMoveState();
+
+        if (move.up) state.player.y -= state.player.speed;
+        if (move.down) state.player.y += state.player.speed;
+        if (move.left) state.player.x -= state.player.speed;
+        if (move.right) state.player.x += state.player.speed;
 
         state.player.x = clamp(state.player.x, 0, state.width - state.player.size);
         state.player.y = clamp(state.player.y, 0, state.height - state.player.size);
@@ -173,6 +185,9 @@ window.MiniGameShared.register("game7", (config = {}) => {
 
           applyAreaStyle();
 
+          input = window.MiniGameShared.createInputManager();
+          input.attach(areaEl, { showVirtualControls: true });
+
           state.player.x = 36;
           state.player.y = state.height - state.player.size - 24;
 
@@ -201,6 +216,11 @@ window.MiniGameShared.register("game7", (config = {}) => {
           if (animationId) {
             cancelAnimationFrame(animationId);
             animationId = null;
+          }
+
+          if (input) {
+            input.detach();
+            input = null;
           }
 
           if (tigerEl && tigerEl.parentNode) {

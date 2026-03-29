@@ -105,6 +105,7 @@ window.MiniGameShared.register("game8", (config = {}) => {
         el.style.boxShadow = "0 10px 18px rgba(0,0,0,0.16)";
         el.style.userSelect = "none";
         el.style.zIndex = "3";
+        el.style.touchAction = "manipulation";
 
         const cow = {
           el,
@@ -112,17 +113,36 @@ window.MiniGameShared.register("game8", (config = {}) => {
           y: centerY - 24,
           size: 52,
           vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed
+          vy: Math.sin(angle) * speed,
+          caught: false
         };
 
-        el.addEventListener("click", () => {
-          if (!running) return;
+        function handleCatch(event) {
+          if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          if (!running || cow.caught) return;
+
+          cow.caught = true;
           score += bonusPerCatch;
           setScore(score);
           el.style.transform = "scale(0.75)";
           el.style.opacity = "0.6";
+          el.style.pointerEvents = "none";
+
           setTimeout(() => removeCow(cow), 90);
-        });
+        }
+
+        el.addEventListener("click", handleCatch);
+        el.addEventListener(
+          "touchstart",
+          (event) => {
+            handleCatch(event);
+          },
+          { passive: false }
+        );
 
         areaEl.appendChild(el);
         cows.push(cow);
