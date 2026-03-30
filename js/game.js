@@ -35,6 +35,8 @@ const answerPopupExplanation = document.getElementById("answer-popup-explanation
 const answerPopupNextBtn = document.getElementById("answer-popup-next-btn");
 
 const SCOREBOARD_KEY = "thai_proverb_scoreboard_v2";
+const SCREEN_ENTER_DURATION = 480;
+const SCREEN_EXIT_DURATION = 240;
 
 const PROVERB_MEANINGS = {
   "ขี่ช้างจับตั๊กแตน": {
@@ -69,6 +71,7 @@ let scoreSaved = false;
 let pendingAfterMiniAction = null;
 let playedMiniGameIndexes = new Set();
 let pendingAnswerFlowAction = null;
+let screenTransitionToken = 0;
 
 totalQuestionEl.textContent = questions.length;
 
@@ -109,15 +112,55 @@ function updateScoreUI() {
 }
 
 function showScreen(screenToShow) {
-  [welcomeScreen, gameScreen, miniGameScreen, resultScreen].forEach((screen) => {
-    screen.classList.remove("active", "fade-in");
+  const screens = [welcomeScreen, gameScreen, miniGameScreen, resultScreen];
+  const currentActiveScreen = screens.find((screen) => screen.classList.contains("active"));
+  const nextToken = screenTransitionToken + 1;
+  screenTransitionToken = nextToken;
+
+  if (currentActiveScreen === screenToShow) {
+    screens.forEach((screen) => {
+      screen.classList.remove("screen-enter", "screen-exit");
+    });
+
+    screenToShow.classList.add("active", "screen-enter");
+
+    setTimeout(() => {
+      if (screenTransitionToken !== nextToken) return;
+      screenToShow.classList.remove("screen-enter");
+    }, SCREEN_ENTER_DURATION);
+
+    return;
+  }
+
+  screens.forEach((screen) => {
+    if (screen !== currentActiveScreen && screen !== screenToShow) {
+      screen.classList.remove("active", "screen-enter", "screen-exit");
+    }
   });
 
-  screenToShow.classList.add("active", "fade-in");
+  if (currentActiveScreen) {
+    currentActiveScreen.classList.remove("screen-enter");
+    currentActiveScreen.classList.add("screen-exit");
+  }
 
   setTimeout(() => {
-    screenToShow.classList.remove("fade-in");
-  }, 500);
+    if (screenTransitionToken !== nextToken) return;
+
+    if (currentActiveScreen) {
+      currentActiveScreen.classList.remove("active", "screen-exit", "screen-enter");
+    }
+
+    screenToShow.classList.add("active", "screen-enter");
+
+    requestAnimationFrame(() => {
+      screenToShow.scrollIntoView({ block: "nearest", behavior: "instant" });
+    });
+
+    setTimeout(() => {
+      if (screenTransitionToken !== nextToken) return;
+      screenToShow.classList.remove("screen-enter");
+    }, SCREEN_ENTER_DURATION);
+  }, currentActiveScreen ? SCREEN_EXIT_DURATION : 0);
 }
 
 function clearQuestionTimer() {

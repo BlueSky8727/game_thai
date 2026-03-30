@@ -11,48 +11,121 @@ window.MiniGameShared.register("game1", (config = {}) => {
     style.id = styleId;
     style.textContent = `
       /* =========================
-         GAME 1 : ทุ่งหญ้า / ป่า / ทุ่งนา
+         GAME 1 : ขี่ช้างจับตั๊กแตน
+         เวอร์ชันอัปเกรดฉาก + ตัวละคร + เอฟเฟกต์
       ========================= */
+
       .theme-field {
         position: relative;
         overflow: hidden;
         background:
-          radial-gradient(circle at 18% 16%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 12%, transparent 26%),
-          radial-gradient(circle at 82% 12%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.05) 10%, transparent 24%),
-          linear-gradient(to bottom, #bfe8ff 0%, #dff4ff 18%, #9fd98a 18%, #80c965 48%, #63b44e 72%, #4c973f 100%);
+          radial-gradient(circle at 18% 14%, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.08) 12%, transparent 26%),
+          radial-gradient(circle at 84% 10%, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.06) 10%, transparent 24%),
+          linear-gradient(to bottom, #b8e4ff 0%, #daf2ff 16%, #b7e39b 16%, #88cf68 46%, #63b44e 74%, #4a943d 100%);
       }
 
-      /* หมอกอ่อน + ลายธรรมชาติ */
       .theme-field::before {
         content: "";
         position: absolute;
         inset: 0;
         pointer-events: none;
+        z-index: 0;
         background:
-          linear-gradient(to top, rgba(20, 60, 18, 0.10), transparent 24%),
+          linear-gradient(to top, rgba(15, 45, 12, 0.10), transparent 28%),
+          radial-gradient(circle at 50% 0%, rgba(255, 243, 184, 0.22), transparent 28%),
           repeating-linear-gradient(
             90deg,
             rgba(255,255,255,0.00) 0px,
-            rgba(255,255,255,0.00) 22px,
-            rgba(255,255,255,0.035) 23px,
-            rgba(255,255,255,0.00) 24px
+            rgba(255,255,255,0.00) 24px,
+            rgba(255,255,255,0.03) 25px,
+            rgba(255,255,255,0.00) 26px
           ),
           repeating-linear-gradient(
             0deg,
             rgba(255,255,255,0.00) 0px,
             rgba(255,255,255,0.00) 34px,
-            rgba(120,170,90,0.05) 35px,
+            rgba(100,150,80,0.05) 35px,
             rgba(255,255,255,0.00) 36px
           );
-        opacity: 0.95;
+        opacity: 0.96;
       }
 
-      /* แนวต้นไม้ไกล ๆ */
+      .theme-field::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background:
+          radial-gradient(circle at 50% 115%, rgba(46, 108, 36, 0.22), transparent 36%);
+        mix-blend-mode: multiply;
+      }
+
+      /* =========================
+         ฉากหลัง
+      ========================= */
+      .theme-field .field-sun {
+        position: absolute;
+        left: 72px;
+        top: 42px;
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        z-index: 0;
+        pointer-events: none;
+        background: radial-gradient(circle, #fff9c2 0%, #ffd96b 68%, #ffc84c 100%);
+        box-shadow:
+          0 0 0 8px rgba(255, 220, 102, 0.14),
+          0 0 34px rgba(255, 216, 98, 0.36);
+      }
+
+      .theme-field .field-cloud {
+        position: absolute;
+        z-index: 0;
+        pointer-events: none;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.72);
+        filter: blur(0.4px);
+        box-shadow:
+          18px -8px 0 8px rgba(255,255,255,0.72),
+          42px 0 0 2px rgba(255,255,255,0.62);
+        animation: game1CloudFloat 6.8s ease-in-out infinite;
+      }
+
+      .theme-field .field-cloud.cloud-a {
+        left: 120px;
+        top: 36px;
+        width: 78px;
+        height: 26px;
+      }
+
+      .theme-field .field-cloud.cloud-b {
+        right: 138px;
+        top: 62px;
+        width: 70px;
+        height: 24px;
+        animation-delay: 1s;
+      }
+
+      .theme-field .field-hill-back {
+        position: absolute;
+        left: -6%;
+        right: -6%;
+        bottom: 28%;
+        height: 20%;
+        z-index: 0;
+        pointer-events: none;
+        border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        background:
+          linear-gradient(180deg, rgba(115, 175, 86, 0.50) 0%, rgba(89, 144, 64, 0.68) 100%);
+        opacity: 0.62;
+      }
+
       .theme-field .field-tree-line {
         position: absolute;
         left: 0;
         right: 0;
-        bottom: 26%;
+        bottom: 25%;
         height: 18%;
         pointer-events: none;
         z-index: 0;
@@ -71,17 +144,16 @@ window.MiniGameShared.register("game1", (config = {}) => {
           radial-gradient(circle at 96% 100%, #4d7a39 0 18%, transparent 19%);
       }
 
-      /* แปลงนา/ลอนหญ้า */
       .theme-field .field-rice-layer {
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        height: 38%;
+        height: 40%;
         pointer-events: none;
         z-index: 0;
         background:
-          linear-gradient(to top, rgba(53, 120, 44, 0.28), transparent 58%),
+          linear-gradient(to top, rgba(53, 120, 44, 0.30), transparent 58%),
           radial-gradient(circle at 8% 100%, #72c556 0 14%, transparent 15%),
           radial-gradient(circle at 18% 100%, #6bbc52 0 13%, transparent 14%),
           radial-gradient(circle at 29% 100%, #79ca5d 0 14%, transparent 15%),
@@ -90,10 +162,28 @@ window.MiniGameShared.register("game1", (config = {}) => {
           radial-gradient(circle at 68% 100%, #69b951 0 13%, transparent 14%),
           radial-gradient(circle at 82% 100%, #73c85a 0 14%, transparent 15%),
           radial-gradient(circle at 95% 100%, #64b04a 0 13%, transparent 14%);
-        opacity: 0.96;
+        opacity: 0.98;
       }
 
-      /* กอหญ้าหน้าฉาก */
+      .theme-field .field-grass-mid {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 8%;
+        height: 18%;
+        pointer-events: none;
+        z-index: 1;
+        background:
+          repeating-linear-gradient(
+            102deg,
+            rgba(77, 145, 53, 0.00) 0px,
+            rgba(77, 145, 53, 0.00) 12px,
+            rgba(128, 198, 84, 0.14) 13px,
+            rgba(77, 145, 53, 0.00) 14px
+          );
+        opacity: 0.92;
+      }
+
       .theme-field .field-grass-front {
         position: absolute;
         left: 0;
@@ -101,7 +191,7 @@ window.MiniGameShared.register("game1", (config = {}) => {
         bottom: 0;
         height: 22%;
         pointer-events: none;
-        z-index: 1;
+        z-index: 2;
         background:
           repeating-linear-gradient(
             100deg,
@@ -110,6 +200,18 @@ window.MiniGameShared.register("game1", (config = {}) => {
             rgba(122, 189, 78, 0.22) 11px,
             rgba(77, 145, 53, 0.00) 12px
           );
+      }
+
+      .theme-field .field-wind {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background:
+          linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.08) 48%, transparent 56%);
+        background-size: 220px 100%;
+        animation: game1WindMove 5.5s linear infinite;
+        opacity: 0.35;
       }
 
       /* =========================
@@ -141,14 +243,15 @@ window.MiniGameShared.register("game1", (config = {}) => {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        font-size: 42px;
+        font-size: 44px;
         line-height: 1;
+        animation: game1VillagerIdle 1.2s ease-in-out infinite;
       }
 
       .player.player-villager-net .villager-net {
         position: absolute;
         right: -8px;
-        top: -4px;
+        top: -2px;
         font-size: 26px;
         transform: rotate(-18deg);
         transform-origin: 20% 80%;
@@ -227,6 +330,36 @@ window.MiniGameShared.register("game1", (config = {}) => {
         animation: game1EnemyCaught 0.12s ease-out forwards;
       }
 
+      /* =========================
+         ANIMATIONS
+      ========================= */
+      @keyframes game1CloudFloat {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(5px);
+        }
+      }
+
+      @keyframes game1WindMove {
+        from {
+          background-position: -220px 0;
+        }
+        to {
+          background-position: 220px 0;
+        }
+      }
+
+      @keyframes game1VillagerIdle {
+        0%, 100% {
+          transform: translate(-50%, -50%) translateY(0px);
+        }
+        50% {
+          transform: translate(-50%, -50%) translateY(-1.5px);
+        }
+      }
+
       @keyframes game1NetIdle {
         from {
           transform: rotate(-24deg) translateY(0px);
@@ -298,29 +431,34 @@ window.MiniGameShared.register("game1", (config = {}) => {
   function ensureSceneDecor(area) {
     if (!area) return;
 
-    if (!area.querySelector(".field-tree-line")) {
-      const treeLine = document.createElement("div");
-      treeLine.className = "field-tree-line";
-      area.appendChild(treeLine);
-    }
+    const decorMap = [
+      ["field-sun"],
+      ["field-cloud cloud-a"],
+      ["field-cloud cloud-b"],
+      ["field-hill-back"],
+      ["field-tree-line"],
+      ["field-rice-layer"],
+      ["field-grass-mid"],
+      ["field-grass-front"],
+      ["field-wind"]
+    ];
 
-    if (!area.querySelector(".field-rice-layer")) {
-      const riceLayer = document.createElement("div");
-      riceLayer.className = "field-rice-layer";
-      area.appendChild(riceLayer);
-    }
-
-    if (!area.querySelector(".field-grass-front")) {
-      const grassFront = document.createElement("div");
-      grassFront.className = "field-grass-front";
-      area.appendChild(grassFront);
-    }
+    decorMap.forEach((classes) => {
+      const selector = "." + classes.join(".");
+      if (!area.querySelector(selector)) {
+        const el = document.createElement("div");
+        el.className = classes.join(" ");
+        area.appendChild(el);
+      }
+    });
   }
 
   function clearSceneDecor(area) {
     if (!area) return;
 
-    area.querySelectorAll(".field-tree-line, .field-rice-layer, .field-grass-front").forEach((el) => {
+    area.querySelectorAll(
+      ".field-sun, .field-cloud, .field-hill-back, .field-tree-line, .field-rice-layer, .field-grass-mid, .field-grass-front, .field-wind"
+    ).forEach((el) => {
       el.remove();
     });
   }
@@ -425,8 +563,9 @@ window.MiniGameShared.register("game1", (config = {}) => {
 
       const moving = movingLeft || movingRight || movingUp || movingDown;
       const bob = moving ? Math.sin(Date.now() / 85) * 2.2 : 0;
+      const tilt = movingLeft ? -3 : movingRight ? 3 : 0;
 
-      playerElement.style.transform = `scaleX(${scaleX}) translateY(${bob}px)`;
+      playerElement.style.transform = `scaleX(${scaleX}) translateY(${bob}px) rotate(${tilt}deg)`;
     },
 
     finishText(score) {
