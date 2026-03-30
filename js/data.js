@@ -28,7 +28,7 @@ const questions = [
     ],
     miniGame: {
       id: "game2",
-      duration: 30,
+      duration: 20,
       bonusPerCatch: 1
     }
   },
@@ -40,7 +40,7 @@ const questions = [
     choices: [
       "ปลาใหญ่กินปลาเล็ก",
       "ปลาโตกินปลาน้อย",
-      "ปลาตัวใหญ่ไล่กินปลาตัวเล็ก"
+      "ปลาไล่กินปลาตัวเล็ก"
     ],
     miniGame: {
       id: "game3",
@@ -107,7 +107,7 @@ const questions = [
       "หมายถึงการหวังผลประโยชน์โดยไม่ต้องลงทุนเอง แต่ในเกมนี้ประยุกต์เป็นการวิ่งหนีเสือให้รอด",
     choices: [
       "จับเสือมือเปล่า",
-      "จับเสือด้วยมือเปล่า",
+      "จับเสือรึป่าว",
       "จับสิงห์มือเปล่า"
     ],
     miniGame: {
@@ -130,7 +130,7 @@ const questions = [
     ],
     miniGame: {
       id: "game8",
-      duration: 12,
+      duration: 10,
       bonusPerCatch: 1
     }
   },
@@ -148,7 +148,7 @@ const questions = [
     ],
     miniGame: {
       id: "game9",
-      duration: 12,
+      duration: 10,
       bonusPerCatch: 1
     }
   },
@@ -166,7 +166,7 @@ const questions = [
     ],
     miniGame: {
       id: "game10",
-      duration: 12,
+      duration: 10,
       bonusPerCatch: 10
     }
   }

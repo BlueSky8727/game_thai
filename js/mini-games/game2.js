@@ -43,7 +43,9 @@ window.MiniGameShared.register("game2", (config = {}) => {
         foodEl: null,
         segmentEls: [],
         tickId: null,
-        running: false
+        running: false,
+        suppressTransitionOnce: false,
+        transitionRestoreRaf: null
       };
 
       function getAreaSize() {
@@ -97,6 +99,13 @@ window.MiniGameShared.register("game2", (config = {}) => {
         }
       }
 
+      function cancelTransitionRestore() {
+        if (state.transitionRestoreRaf) {
+          cancelAnimationFrame(state.transitionRestoreRaf);
+          state.transitionRestoreRaf = null;
+        }
+      }
+
       function isOccupied(x, y) {
         return state.segments.some((segment) => segment.x === x && segment.y === y);
       }
@@ -122,6 +131,31 @@ window.MiniGameShared.register("game2", (config = {}) => {
         return el;
       }
 
+      function applySegmentTransitionMode() {
+        const transitionValue = state.suppressTransitionOnce
+          ? "none"
+          : "left 0.08s linear, top 0.08s linear";
+
+        state.segmentEls.forEach((el) => {
+          el.style.transition = transitionValue;
+        });
+      }
+
+      function scheduleTransitionRestoreIfNeeded() {
+        if (!state.suppressTransitionOnce) return;
+
+        cancelTransitionRestore();
+        state.transitionRestoreRaf = requestAnimationFrame(() => {
+          state.transitionRestoreRaf = requestAnimationFrame(() => {
+            state.segmentEls.forEach((el) => {
+              el.style.transition = "left 0.08s linear, top 0.08s linear";
+            });
+            state.suppressTransitionOnce = false;
+            state.transitionRestoreRaf = null;
+          });
+        });
+      }
+
       function renderSnake() {
         while (state.segmentEls.length < state.segments.length) {
           createSegmentEl(state.segmentEls.length);
@@ -133,6 +167,8 @@ window.MiniGameShared.register("game2", (config = {}) => {
             extra.parentNode.removeChild(extra);
           }
         }
+
+        applySegmentTransitionMode();
 
         state.segments.forEach((segment, index) => {
           const el = state.segmentEls[index];
@@ -152,6 +188,8 @@ window.MiniGameShared.register("game2", (config = {}) => {
             ? `${Math.max(18, state.cellSize * 0.42)}px`
             : "0px";
         });
+
+        scheduleTransitionRestoreIfNeeded();
       }
 
       function spawnFood() {
@@ -204,6 +242,8 @@ window.MiniGameShared.register("game2", (config = {}) => {
         state.nextDirection = { x: 1, y: 0 };
         state.growPending = 0;
         state.score = 0;
+        state.suppressTransitionOnce = false;
+        cancelTransitionRestore();
         state.segments = [];
 
         for (let i = 0; i < startLength; i += 1) {
@@ -220,21 +260,34 @@ window.MiniGameShared.register("game2", (config = {}) => {
 
       function handleCrash() {
         if (!state.running) return;
-        setResultText(`งูชนตัวเองแล้ว! กินไก่ได้ ${state.score} ตัว รับโบนัส +${state.score} คะแนน`);
+        setResultText(
+          `งูชนตัวเองแล้ว! กินไก่ได้ ${state.score} ตัว รับโบนัส +${state.score} คะแนน`
+        );
         finishNow();
       }
 
       function wrapPosition(head) {
         let x = head.x;
         let y = head.y;
+        let wrapped = false;
 
-        if (x < 0) x = state.cols - 1;
-        else if (x >= state.cols) x = 0;
+        if (x < 0) {
+          x = state.cols - 1;
+          wrapped = true;
+        } else if (x >= state.cols) {
+          x = 0;
+          wrapped = true;
+        }
 
-        if (y < 0) y = state.rows - 1;
-        else if (y >= state.rows) y = 0;
+        if (y < 0) {
+          y = state.rows - 1;
+          wrapped = true;
+        } else if (y >= state.rows) {
+          y = 0;
+          wrapped = true;
+        }
 
-        return { x, y };
+        return { x, y, wrapped };
       }
 
       function update() {
@@ -251,7 +304,13 @@ window.MiniGameShared.register("game2", (config = {}) => {
           y: head.y + state.direction.y
         };
 
-        const newHead = wrapPosition(movedHead);
+        const wrappedHead = wrapPosition(movedHead);
+        const newHead = {
+          x: wrappedHead.x,
+          y: wrappedHead.y
+        };
+
+        state.suppressTransitionOnce = wrappedHead.wrapped;
 
         if (
           state.segments.some(
@@ -308,6 +367,7 @@ window.MiniGameShared.register("game2", (config = {}) => {
           applyBoardStyles();
           clearSegments();
           clearFood();
+          cancelTransitionRestore();
         },
 
         start() {
@@ -321,6 +381,7 @@ window.MiniGameShared.register("game2", (config = {}) => {
         stop() {
           state.running = false;
           stopTick();
+          cancelTransitionRestore();
           clearBoard();
         },
 

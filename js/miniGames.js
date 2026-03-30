@@ -27,6 +27,7 @@ window.MiniGames = (() => {
   let finishLocked = false;
   let currentController = null;
   let resultPopupEl = null;
+  let timerStarted = false;
 
   const keys = {};
   const enemies = [];
@@ -51,8 +52,6 @@ window.MiniGames = (() => {
       arrowdown: "arrowdown",
       arrowleft: "arrowleft",
       arrowright: "arrowright",
-
-      // รองรับตอนคีย์บอร์ดเป็นภาษาไทย
       "ไ": "w",
       "ฟ": "a",
       "ห": "s",
@@ -88,13 +87,9 @@ window.MiniGames = (() => {
 
   function shouldHandleGameKey(event, normalizedKey) {
     if (!normalizedKey) return false;
-
     if (!gameActive) return false;
-
     if (miniGameOverlay.classList.contains("active")) return false;
-
     if (isEditableTarget(event.target)) return false;
-
     return true;
   }
 
@@ -103,6 +98,24 @@ window.MiniGames = (() => {
       clearInterval(timer);
       timer = null;
     }
+    timerStarted = false;
+  }
+
+  function startMiniTimer() {
+    if (!gameActive || timerStarted) return;
+
+    clearMiniTimer();
+    timerStarted = true;
+    miniTimeEl.textContent = timeLeft;
+
+    timer = setInterval(() => {
+      timeLeft -= 1;
+      miniTimeEl.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        finishGame();
+      }
+    }, 1000);
   }
 
   function clearGameLoop() {
@@ -300,9 +313,7 @@ window.MiniGames = (() => {
     const speedLimit = Number(currentDefinition?.enemySpeedLimit) || 2.4;
 
     for (const enemy of enemies) {
-      if (enemy.isBeingCaught) {
-        continue;
-      }
+      if (enemy.isBeingCaught) continue;
 
       if (typeof currentDefinition?.customUpdateEnemy === "function") {
         currentDefinition.customUpdateEnemy(enemy, player, area, {
@@ -311,7 +322,6 @@ window.MiniGames = (() => {
           runDistance,
           speedLimit
         });
-
         renderEnemy(enemy);
         continue;
       }
@@ -462,15 +472,9 @@ window.MiniGames = (() => {
   }
 
   function getDefaultResultMessage(score) {
-    if (score >= 10) {
-      return "เก่งมาก! ตอบได้ไวและเล่นได้ดีสุด ๆ";
-    }
-    if (score >= 5) {
-      return "ดีมาก! เก็บคะแนนได้เยอะเลย";
-    }
-    if (score > 0) {
-      return "ดีแล้ว! ลองอีกนิดได้คะแนนเพิ่มแน่นอน";
-    }
+    if (score >= 10) return "เก่งมาก! ตอบได้ไวและเล่นได้ดีสุด ๆ";
+    if (score >= 5) return "ดีมาก! เก็บคะแนนได้เยอะเลย";
+    if (score > 0) return "ดีแล้ว! ลองอีกนิดได้คะแนนเพิ่มแน่นอน";
     return "ไม่เป็นไร ลองใหม่อีกรอบได้นะ";
   }
 
@@ -672,6 +676,9 @@ window.MiniGames = (() => {
       finishNow() {
         finishGame();
       },
+      startMiniTimer() {
+        startMiniTimer();
+      },
       clearAreaInlineStyles
     };
 
@@ -696,6 +703,7 @@ window.MiniGames = (() => {
     gameActive = true;
     catchLocked = false;
     finishLocked = false;
+    timerStarted = false;
 
     miniScoreEl.textContent = bonusScore;
     miniTimeEl.textContent = timeLeft;
@@ -727,15 +735,9 @@ window.MiniGames = (() => {
       gameLoop();
     }
 
-    clearMiniTimer();
-    timer = setInterval(() => {
-      timeLeft -= 1;
-      miniTimeEl.textContent = timeLeft;
-
-      if (timeLeft <= 0) {
-        finishGame();
-      }
-    }, 1000);
+    if (!currentDefinition?.deferStartTimer) {
+      startMiniTimer();
+    }
   }
 
   function setup(config, callback) {
@@ -760,6 +762,7 @@ window.MiniGames = (() => {
     timeLeft = Number(currentDefinition.duration) || 10;
     catchLocked = false;
     finishLocked = false;
+    timerStarted = false;
 
     miniGameTitle.textContent = currentDefinition.title || "มินิเกม";
     miniGameDesc.textContent = currentDefinition.description || "";
