@@ -30,6 +30,25 @@
   max-width: 760px;
 }
 
+.welcome-logo-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.welcome-logo {
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+  border-radius: 28px;
+  background: #ffffff;
+  border: 3px solid #e3f2fc;
+  box-shadow:
+    0 14px 30px rgba(18, 96, 145, 0.16),
+    0 4px 12px rgba(18, 96, 145, 0.08);
+}
+
 .welcome-badge,
 .result-badge {
   display: inline-block;

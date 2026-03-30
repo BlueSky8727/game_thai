@@ -11,6 +11,16 @@
     min-height: 560px;
   }
 
+  .welcome-logo-wrap {
+    margin-bottom: 16px;
+  }
+
+  .welcome-logo {
+    width: 88px;
+    height: 88px;
+    border-radius: 22px;
+  }
+
   .welcome-title,
   .result-title {
     font-size: 30px;
