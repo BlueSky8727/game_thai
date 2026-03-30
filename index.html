@@ -6,6 +6,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เกมทายคำสุภาษิตไทย</title>
   <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ปรับเฉพาะหน้า welcome ให้โลโก้ใหญ่ขึ้นและบาลานซ์ขึ้น */
+    #welcome-screen .welcome-content {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    #welcome-screen .welcome-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 250px;
+      margin-bottom: 10px;
+      padding: 10px 0 4px;
+    }
+
+    #welcome-screen .welcome-logo {
+      display: block;
+      width: min(360px, 78vw);
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 24px;
+      filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.12));
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    #welcome-screen .welcome-logo:hover {
+      transform: scale(1.03);
+      filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.16));
+    }
+
+    #welcome-screen .welcome-badge {
+      margin-top: 2px;
+    }
+
+    #welcome-screen .welcome-title {
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #welcome-screen .welcome-subtitle {
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
+      #welcome-screen .welcome-logo-wrap {
+        min-height: 210px;
+      }
+
+      #welcome-screen .welcome-logo {
+        width: min(300px, 82vw);
+      }
+    }
+
+    @media (max-width: 480px) {
+      #welcome-screen .welcome-logo-wrap {
+        min-height: 180px;
+        margin-bottom: 6px;
+      }
+
+      #welcome-screen .welcome-logo {
+        width: min(250px, 84vw);
+        border-radius: 18px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="app-container">
